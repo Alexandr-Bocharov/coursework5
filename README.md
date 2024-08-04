@@ -1,12 +1,12 @@
 # Курсовая работа 5  
 
 ## Содержание  
-1. [Описание проекта](#Описание)  
-2. [Требования к реализации](#Требования)
-3. [Интерфейс пользователя](#Интерфейc)
-4. [Используемые библиотеки](#Библиотеки)
+1. [Описание проекта](#Описание-проекта)  
+2. [Требования к реализации](#Требования-к-реализации)
+3. [Интерфейс пользователя](#Интерфейc-пользователя)
+4. [Используемые библиотеки](#Используемые-библиотеки)
 5. [Использование](#Использование)
-6. [Команда разработки](#Команда)
+6. [Команда разработки](#Команда-разработки)
 7. [Источники](#Источники)
 
 
@@ -19,12 +19,12 @@
   который подключается к hh.ru и через метод get_vacancies получает список вакансий.  
 - **Класс DBManager**: подключается к базе данных coursework5 и работает с ее таблицами.  
   Имеет методы :  
-  1. get_companies_and_vacancies_count  
-  2. get_all_vacancies_with_some_columns  
-  3. get_all_vacancies  
-  4. get_avg_salary  
-  5. get_vacancies_with_higher_salary  
-  6. get_vacancies_with_keyword  
+  - get_companies_and_vacancies_count  
+  - get_all_vacancies_with_some_columns  
+  - get_all_vacancies  
+  - get_avg_salary  
+  - get_vacancies_with_higher_salary  
+  - get_vacancies_with_keyword  
 - **db_filler**: python-модуль для создания и заполнения таблиц.  
   Берет данные о вакансиях через HeadHunterAPIVacancies метод get_vacancies и заполняет ими таблицы.  
 
