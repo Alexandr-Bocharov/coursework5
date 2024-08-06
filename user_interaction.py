@@ -1,5 +1,6 @@
 from src.hh_vacancies import HeadHunterAPIVacancies
 from sql.db_manager import DBManager
+from sql.db_filler import drop_tables
 
 
 def user_interaction():
@@ -34,12 +35,11 @@ def user_interaction():
             result = db_manager.get_vacancies_with_keyword(keywrd)
             print_get_vacancies_with_keyword(result)
         elif number == '6':
-            exit()
+            break
         elif number.isdigit():
             print(f'Введена неправильная(ое) цифра/число, попробуйте еще раз\n')
         elif not number.isdigit():
             print('Введите цифру от 1 до 6\n')
-
 
 def print_get_companies_and_vacancies_count(data):
     print('-' * 100)
@@ -75,9 +75,10 @@ def print_get_all_vacancies(data):
 def print_get_vacancies_with_higher_salary(data):
     print('-' * 100)
     for line in data:
-        print(f'Компания: {line[0]}')
-        print(f"Вакансия и ссылка: {line[1]}, {line[-1]}")
-        print(f"Зарплата: от {line[2]} до {line[3]} {line[4]}")
+        print(f"Вакансия и ссылка: {line[1]}, {line[3]}")
+        print(f"Зарплата: от {line[8]} до {line[9]} {line[10]}")
+        print(f"Город: {line[5]}")
+        print(f"Опыт: {line[4]}")
         print()
     print('-' * 100)
 
@@ -85,9 +86,10 @@ def print_get_vacancies_with_higher_salary(data):
 def print_get_vacancies_with_keyword(data):
     print('-' * 100)
     for line in data:
-        print(f'Компания: {line[0]}')
-        print(f"Вакансия и ссылка: {line[1]}, {line[-1]}")
-        print(f"Зарплата: от {line[2]} до {line[3]} {line[4]}")
+        print(f"Вакансия и ссылка: {line[1]}, {line[3]}")
+        print(f"Зарплата: от {line[8]} до {line[9]} {line[10]}")
+        print(f"Город: {line[5]}")
+        print(f"Опыт: {line[4]}")
         print()
     print('-' * 100)
 
