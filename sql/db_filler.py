@@ -3,7 +3,6 @@ from src.hh_vacancies import HeadHunterAPIVacancies
 
 
 def create_and_fill_tables():
-
     conn_params = {
         'host': 'localhost',
         'user': 'postgres',
@@ -77,8 +76,27 @@ def create_and_fill_tables():
                                 (salary_from, salary_to, currency, vacancy_id))
 
 
-if __name__ == '__main__':
-    create_and_fill_tables()
+def drop_tables():
+    conn_params = {
+        'host': 'localhost',
+        'user': 'postgres',
+        'password': '2306',
+        'port': '5433',
+        'database': 'coursework5'
+    }
+
+    with psycopg2.connect(**conn_params) as conn:
+        with conn.cursor() as cur:
+
+            cur.execute("DROP TABLE salaries;")
+            cur.execute("DROP TABLE vacancies;")
+            cur.execute("DROP TABLE employers;")
+
+
+# if __name__ == '__main__':
+#     # create_and_fill_tables()
+#     drop_tables()
+
 
 # hh = HeadHunterAPIVacancies()
 # vacancies_hh = hh.get_vacancies('developer')
