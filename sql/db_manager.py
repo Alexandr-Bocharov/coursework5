@@ -131,11 +131,9 @@ class DBManager(DB):
 
         cur = self.conn.cursor()
         try:
-            cur.execute(f"SELECT salary_from, salary_to FROM salaries;")
-            result = cur.fetchall()
-            result = list(map(lambda x: x[1] if x[1] else x[0], result))
-            avg_salary = round(sum(result) / len(result))
-            return avg_salary
+            cur.execute(f"SELECT AVG(salary_from) AS avg_salary FROM salaries;")
+            result = round(cur.fetchall()[0][0])
+            return result
         except psycopg2.Error as e:
             print(f"Произошла ошибка: {e}")
         finally:
@@ -143,22 +141,48 @@ class DBManager(DB):
 
     def get_vacancies_with_higher_salary(self):
         """ Получает список всех вакансий, у которых зарплата выше средней по всем вакансиям """
-        vacancies_with_higher_salary = []
+        self.__connect()
+        if not self.conn:
+            print('Нет подключения к бд')
+            return None
+
+        cur = self.conn.cursor()
         avg_salary = self.get_avg_salary()
-        all_vacancies = self.get_all_vacancies_with_some_columns()
-        for vacancy in all_vacancies:
-            salary_from_to = (vacancy[2], vacancy[3])
-            salary = salary_from_to[1] if salary_from_to[1] else salary_from_to[0]  # Логика для сравнения зарплаты
-            if salary > avg_salary:
+        try:
+            cur.execute(f"SELECT * "
+                        f"FROM vacancies "
+                        f"JOIN salaries ON vacancies.id=salaries.vacancy_id "
+                        f"WHERE salaries.salary_from > {avg_salary};")
+            result = cur.fetchall()
+            vacancies_with_higher_salary = []
+            for vacancy in result:
                 vacancies_with_higher_salary.append(vacancy)
-        return vacancies_with_higher_salary
+            return vacancies_with_higher_salary
+        except psycopg2.Error as e:
+            print(f"Произошла ошибка: {e}")
+        finally:
+            self.__close_connection()
 
     def get_vacancies_with_keyword(self, keyword):
         """ Получает список всех вакансий,
         в названии которых содержатся переданные в метод слова, например python """
-        all_vacancies = self.get_all_vacancies_with_some_columns()
-        vacancies_with_keyword = [vac for vac in all_vacancies if keyword.lower() in vac[1].lower()]
-        return vacancies_with_keyword
+        self.__connect()
+        if not self.conn:
+            print('Нет подключения к бд')
+            return None
+
+        cur = self.conn.cursor()
+        try:
+            cur.execute(f"SELECT * "
+                        f"FROM vacancies "
+                        f"JOIN salaries ON vacancies.id=salaries.vacancy_id "
+                        f"WHERE lower(name) LIKE '%{keyword.lower()}%';")
+            result = cur.fetchall()
+            return result
+        except psycopg2.Error as e:
+            print(f"Произошла ошибка: {e}")
+        finally:
+            self.__close_connection()
 
 
 
@@ -168,8 +192,12 @@ class DBManager(DB):
 
 # if __name__ == '__main__':
 #     db_worker = DBManager('coursework5', 'postgres', '2306', 'localhost', '5433')
-#     for line in db_worker.get_vacancies_with_keyword('python'):
+#     # for line in db_worker.get_vacancies_with_keyword('Developer'):
+#     #     print(line)
+#     for line in db_worker.get_companies_and_vacancies_count():
 #         print(line)
+    # print(db_worker.get_avg_salary())
+    # print(len(db_worker.get_vacancies_with_higher_salary()))
 
 
 
